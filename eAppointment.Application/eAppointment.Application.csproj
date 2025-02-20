@@ -12,4 +12,8 @@
     <PackageReference Include="TS.Result" Version="8.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\eAppointment.Domain\eAppointment.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
