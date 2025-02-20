@@ -1,4 +1,5 @@
-﻿using eAppointment.Domain.Entities;
+﻿using eAppointment.Application.Services;
+using eAppointment.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,8 @@ using TS.Result;
 
 namespace eAppointment.Application.Features.Auth.Login;
 
-internal sealed class LoginCommandHandler(UserManager<AppUser> userManager) : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>
+internal sealed class LoginCommandHandler(UserManager<AppUser> userManager,
+                                          IJwtProvider jwtProvider) : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>
 {
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
@@ -23,6 +25,8 @@ internal sealed class LoginCommandHandler(UserManager<AppUser> userManager) : IR
         if (!isPasswordCorrect)
             return Result<LoginCommandResponse>.Failure("Password is wrong");
 
-        return Result<LoginCommandResponse>.Succeed(new (""));
+        string token = jwtProvider.GenerateToken(appUser);
+        LoginCommandResponse response = new(token);
+        return Result<LoginCommandResponse>.Succeed(response);
     }
 }
