@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace eAppointment.Domain.Entities
-{
+﻿namespace eAppointment.Domain.Entities;
     public sealed class Patient
     {
         public Patient()
@@ -20,4 +13,3 @@ namespace eAppointment.Domain.Entities
         public string Town { get; set; } = string.Empty;
         public string FullAddress { get; set; } = string.Empty;
     }
-}

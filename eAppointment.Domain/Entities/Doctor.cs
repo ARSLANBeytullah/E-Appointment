@@ -1,12 +1,6 @@
 ﻿using eAppointment.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace eAppointment.Domain.Entities
-{
+namespace eAppointment.Domain.Entities;
     public sealed class Doctor
     {
         public Doctor()
@@ -19,4 +13,3 @@ namespace eAppointment.Domain.Entities
         public string FullName => string.Join(" ", FirstName, LastName);
         public DepartmentEnum Department { get; set; } = DepartmentEnum.Acil;
     }
-}
