@@ -25,7 +25,7 @@ internal sealed class LoginCommandHandler(UserManager<AppUser> userManager,
         if (!isPasswordCorrect)
             return Result<LoginCommandResponse>.Failure("Password is wrong");
 
-        string token = jwtProvider.GenerateToken(appUser);
+        string token = jwtProvider.CreateToken(appUser);
         LoginCommandResponse response = new(token);
         return Result<LoginCommandResponse>.Succeed(response);
     }
