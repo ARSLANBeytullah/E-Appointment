@@ -1,7 +1,9 @@
-﻿using eAppointment.Domain.Entities;
+﻿using eAppointment.Application.Services;
+using eAppointment.Domain.Entities;
 using eAppointment.Domain.Repositories;
 using eAppointmentServer.Infrastructure.Context;
 using eAppointmentServer.Infrastructure.Repositories;
+using eAppointmentServer.Infrastructure.Services;
 using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,10 +31,13 @@ public static class DependencyInjection
             action.Password.RequireDigit = false;
         }).AddEntityFrameworkStores<ApplicationDbContext>();
 
+        services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
+
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<IPatientRepository, PatientRepository>();
-        services.AddScoped<IUnitOfWork>(srv=>srv.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
 
