@@ -8,6 +8,7 @@ using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace eAppointmentServer.Infrastructure;
 
@@ -33,11 +34,21 @@ public static class DependencyInjection
 
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
 
-        services.AddScoped<IAppointmentRepository, AppointmentRepository>();
-        services.AddScoped<IDoctorRepository, DoctorRepository>();
-        services.AddScoped<IPatientRepository, PatientRepository>();
+        services.Scan( action => //Yazılacak bütün servislerin dipendency injection işlemlerini gerçekleştirir. Interface'ler büyük ı harfi ile başladığı sürece otomatik olarak tanımlar.
+        {
+                action
+                .FromAssemblies(typeof(DependencyInjection).Assembly) //DI' ı bu katmanda(Infrastructor) katmanında gerçekleştir.
+                .AddClasses(publicOnly: false) //sadece public class'larda mı uygulansını false yaptım ki farklı access modifier'larda dahil olsun diye.
+                .UsingRegistrationStrategy(registrationStrategy: RegistrationStrategy.Skip)//halihazırda DI uygulanmış servisleri geç. Yeni ekleceklere müdahalede bulun.
+                .AsImplementedInterfaces()
+                .WithScopedLifetime();
+        });
 
-        services.AddScoped<IJwtProvider, JwtProvider>();
+        //services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+        //services.AddScoped<IDoctorRepository, DoctorRepository>();
+        //services.AddScoped<IPatientRepository, PatientRepository>();
+
+        //services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
 
